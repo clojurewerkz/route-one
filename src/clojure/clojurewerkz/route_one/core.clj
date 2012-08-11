@@ -53,6 +53,17 @@
   [v path &{ :as opts }]
   (conj v (Route. path (:named opts) opts)))
 
+(defn add-route!
+  "Add a route to a route-map"
+  ([path opts]
+     (add-route! route-maps path opts))
+  ([a path opts]
+     (dosync
+      (swap! a
+             #(apply route %
+                     path
+                     (apply concat opts))))))
+
 (defmacro route-map
   "Defines a route map.
 
