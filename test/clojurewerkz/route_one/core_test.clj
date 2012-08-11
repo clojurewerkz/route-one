@@ -45,3 +45,14 @@
       (is (= "https://api.myapp.com/about" (named-url "about page"))))
     (testing "generation of named routes with segments"
       (is (= "https://api.myapp.com/docs/a-title" (named-url "documents" {:title "a-title"}))))))
+
+(deftest test-add-route
+  (testing "adding routes to an atom passed as a parameter"
+    (let [routes (atom empty-route-map)]
+      (add-route! routes "/about" {:named "about page"})
+      (is (= (count @routes) 1))))
+
+  (testing "adding routes to the default route map"
+    (dosync (reset! route-maps empty-route-map))
+    (add-route! "/about" {:named "about page"})
+    (is (= "/about" (named-path "about page")))))
