@@ -7,11 +7,10 @@
 ;; Implementation
 ;;
 
-(defrecord Route [path name opts])
+(defrecord Route [path name helper opts])
 
 (def route-maps (atom []))
 (def empty-route-map [])
-
 
 (def ^{:constant true :private true}
   slash-re #"/")
@@ -51,7 +50,13 @@
    (route \"/help\"  :named \"help page\")
    (route \"/docs/:title\" :named \"documents\")"
   [v path &{ :as opts }]
-  (conj v (Route. path (:named opts) opts)))
+
+  (when (:helper opts)
+    (intern *ns* (symbol (str (name (:helper opts)) "-path"))
+            (fn [& data]
+              (replace-segments path (first data)))))
+
+  (conj v (Route. path (:named opts) (:helper opts) opts)))
 
 (defn add-route!
   "Add a route to a route-map"

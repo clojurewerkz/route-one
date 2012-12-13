@@ -4,11 +4,10 @@
 
 
 (route-map
-  (route "/about" :named "about page")
-  (route "/faq")
-  (route "/help"  :named "help page")
-  (route "/docs/:title" :named "documents"))
-
+ (route "/about" :helper :about :named "about page")
+ (route "/faq")
+ (route "/help"  :helper :help :named "help page")
+ (route "/docs/:title" :helper :documents :named "documents"))
 
 (deftest test-replace-segments
   (testing "cases with all segments present in the data map"
@@ -28,8 +27,10 @@
   (testing "generation of routes with segments"
     (is (= "/clojurewerkz/route-one" (path-for "/:organization/:project" {:organization "clojurewerkz" :project "route-one"}))))
   (testing "generation of named routes w/o segments"
+    (is (= "/about" (about-path)))
     (is (= "/about" (named-path "about page"))))
   (testing "generation of named routes with segments"
+    (is (= "/docs/a-title" (documents-path {:title "a-title"})))
     (is (= "/docs/a-title" (named-path "documents" {:title "a-title"})))))
 
 (deftest test-url-generation
