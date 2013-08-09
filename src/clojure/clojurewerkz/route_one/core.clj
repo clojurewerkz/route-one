@@ -22,8 +22,8 @@
 (defn validate-keys
   [^String s data]
   (let [required-parts (->> (split s #"/|\.")
-                            (filter #(.startsWith % ":"))
-                            (map #(keyword (.substring % 1)))
+                            (filter #(.startsWith ^String % ":"))
+                            (map #(keyword (.substring ^String % 1)))
                             set)
         existing-parts (set (keys data))
         diff (cs/difference required-parts existing-parts)]

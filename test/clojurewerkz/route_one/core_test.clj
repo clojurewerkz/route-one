@@ -7,7 +7,8 @@
  (route "/about" :helper :about :named "about page")
  (route "/faq")
  (route "/help"  :helper :help :named "help page")
- (route "/docs/:title" :helper :documents :named "documents"))
+ (route "/docs/:title" :helper :documents :named "documents")
+ (route "/docs/:title.:ext" :helper :documents-with-ext :named "documents-with-ext"))
 
 (deftest test-replace-segments
   (testing "cases with all segments present in the data map"
@@ -31,7 +32,11 @@
     (is (= "/about" (named-path "about page"))))
   (testing "generation of named routes with segments"
     (is (= "/docs/a-title" (documents-path {:title "a-title"})))
-    (is (= "/docs/a-title" (named-path "documents" {:title "a-title"})))))
+    (is (= "/docs/a-title" (named-path "documents" {:title "a-title"}))))
+  (testing "generation of named routes with segments"
+    (is (= "/docs/a-title.txt" (documents-with-ext-path {:title "a-title" :ext "txt"})))
+    (is (= "/docs/a-title.txt" (named-path "documents-with-ext" {:title "a-title" :ext "txt"}))))
+  )
 
 (deftest test-url-generation
   (with-base-url "http://giove.local"
