@@ -1,5 +1,6 @@
 (ns clojurewerkz.route-one.core
   (:import clojurewerkz.urly.UrlLike)
+  (:require [clojure.set :as cs])
   (:use [clojure.string :only [split join]]
         [clojurewerkz.urly.core :only [url-like]]))
 
@@ -17,21 +18,32 @@
 (def ^{:constant true :private true}
   slash "/")
 
-(defn- replace-segment
+
+(defn validate-keys
   [^String s data]
-  (if (.startsWith s ":")
-    (if-let [v (get data (keyword (.substring s 1)))]
-      v
-      (throw (IllegalArgumentException. (str "Segment " s " is not found in the map " data))))
-    s))
+  (let [required-parts (->> (split s #"/|\.")
+                            (filter #(.startsWith % ":"))
+                            (map #(keyword (.substring % 1)))
+                            set)
+        existing-parts (set (keys data))
+        diff (cs/difference required-parts existing-parts)]
+    (when (not (empty? diff))
+      (throw
+       (IllegalArgumentException.
+        (str "Following segments are missing in the map " data ": " diff))))))
 
 (defn replace-segments
   "Replaces segments that start with a colon with respective values from the data map.
 
    Example: (\"/docs/title\" { :title \"ohai\" }) ;; => \"/docs/title\""
   [^String s data]
-  (let [parts (split s slash-re)]
-    (join slash (map #(replace-segment % data) parts))))
+  (validate-keys s data)
+  (reduce (fn [acc [k replacement]]
+            (let [pattern (re-pattern (str ":" (name k)))]
+              (clojure.string/replace acc
+                                      pattern
+                                      (str replacement))))
+          s data))
 
 
 ;;
