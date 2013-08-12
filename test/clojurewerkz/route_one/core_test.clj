@@ -2,13 +2,12 @@
   (:use clojure.test
         clojurewerkz.route-one.core))
 
-
-(route-map
- (route "/about" :helper :about :named "about page")
- (route "/faq")
- (route "/help"  :helper :help :named "help page")
- (route "/docs/:title" :helper :documents :named "documents")
- (route "/docs/:title.:ext" :helper :documents-with-ext :named "documents-with-ext"))
+(defroute about "/about")
+(defroute faq "/faq")
+(defroute help "/help")
+(defroute documents "/docs/:title")
+(defroute category-documents "/docs/:category/:title")
+(defroute documents-with-ext "/docs/:title.:ext")
 
 (deftest test-replace-segments
   (testing "cases with all segments present in the data map"
@@ -28,37 +27,30 @@
   (testing "generation of routes with segments"
     (is (= "/clojurewerkz/route-one" (path-for "/:organization/:project" {:organization "clojurewerkz" :project "route-one"}))))
   (testing "generation of named routes w/o segments"
-    (is (= "/about" (about-path)))
-    (is (= "/about" (named-path "about page"))))
+    (is (= "/about" (about-path))))
   (testing "generation of named routes with segments"
-    (is (= "/docs/a-title" (documents-path {:title "a-title"})))
-    (is (= "/docs/a-title" (named-path "documents" {:title "a-title"}))))
+    (is (= "/docs/cat/a-title" (category-documents-path :title "a-title" :category "cat")))
+    (is (= "/docs/a-title" (documents-path :title "a-title"))))
   (testing "generation of named routes with segments"
-    (is (= "/docs/a-title.txt" (documents-with-ext-path {:title "a-title" :ext "txt"})))
-    (is (= "/docs/a-title.txt" (named-path "documents-with-ext" {:title "a-title" :ext "txt"}))))
-  )
+    (is (= "/docs/a-title.txt" (documents-with-ext-path :title "a-title" :ext "txt")))))
 
 (deftest test-url-generation
   (with-base-url "http://giove.local"
     (testing "generation of routes w/o segments"
       (is (= "http://giove.local/about"         (url-for "/about" {})))
       (is (= "http://giove.local/about/project" (url-for "/about/project" {})))))
+  (with-base-url "http://giove.local"
+    (testing "generation of routes w/o segments"
+      (is (= "http://giove.local/about"         (about-url)))))
   ;; really broken input
   (with-base-url "HTTP://https://API.MYAPP.COM/"
     (testing "generation of routes with segments"
-      (is (= "https://api.myapp.com/clojurewerkz/route-one" (url-for "/:organization/:project" {:organization "clojurewerkz" :project "route-one"}))))
-    (testing "generation of named routes w/o segments"
-      (is (= "https://api.myapp.com/about" (named-url "about page"))))
-    (testing "generation of named routes with segments"
-      (is (= "https://api.myapp.com/docs/a-title" (named-url "documents" {:title "a-title"}))))))
+      (is (= "https://api.myapp.com/clojurewerkz/route-one" (url-for "/:organization/:project" {:organization "clojurewerkz" :project "route-one"}))))))
 
-(deftest test-add-route
-  (testing "adding routes to an atom passed as a parameter"
-    (let [routes (atom empty-route-map)]
-      (add-route! routes "/about" {:named "about page"})
-      (is (= (count @routes) 1))))
-
-  (testing "adding routes to the default route map"
-    (dosync (reset! route-maps empty-route-map))
-    (add-route! "/about" {:named "about page"})
-    (is (= "/about" (named-path "about page")))))
+(deftest test-templates
+  (is (= "/about" about-template))
+  (is (= "/faq" faq-template))
+  (is (= "/help" help-template))
+  (is (= "/docs/:title" documents-template))
+  (is (= "/docs/:category/:title" category-documents-template))
+  (is (= "/docs/:title.:ext" documents-with-ext-template)))

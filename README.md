@@ -9,35 +9,53 @@ Route One is intentionally small and has very limited feature scope.
 
 ## Documentation & Examples
 
-``` clojure
+```clj
 (ns my.app
-  (:use [clojurewerkz.route-one.core :only [route-map route path-for named-path]]))
+  (:use [clojurewerkz.route-one.core))
 
-;; define a route map
-(route-map
-  (route "/about" :named "about page")
-  (route "/faq")
-  (route "/help"  :named "help page")
-  (route "/docs/:title" :named "documents"))
+;; define your routes
+(defroute about "/about")
+(defroute faq "/faq")
+(defroute help "/help")
+(defroute documents "/docs/:title")
+(defroute category-documents "/docs/:category/:title")
+(defroute documents-with-ext "/docs/:title.:ext")
 
-;; generate relative paths
-(path-for "/docs/title"  { :title "ohai" }) ;; => "/docs/title"
-(path-for "/docs/:title" { :title "ohai" }) ;; => "/docs/ohai"
+;; generate relative paths (by generated fns)
+(documents-path :title "a-title") ;; => "/docs/title"
+(documents-path :title "a-title") ;; => "/docs/ohai"
+
 (path-for "/docs/:category/:title" { :category "greetings" :title "ohai" }) ;; => "/docs/greetings/ohai"
 (path-for "/docs/:category/:title" { :category "greetings" }) ;; => IllegalArgumentException, because :title value is missing
-
-(named-path "about page") ;; => "/about"
-(named-path "documents" {:title "a-title"}) ;; => "/docs/a-title"
 
 (with-base-url "https://myservice.com"
   (url-for "/docs/title"  { :title "ohai" }) ;; => "https://myservice.com/docs/title"
   (url-for "/docs/:title" { :title "ohai" }) ;; => "https://myservice.com/docs/ohai"
   (url-for "/docs/:category/:title" { :category "greetings" :title "ohai" }) ;; => "https://myservice.com/docs/greetings/ohai"
   (url-for "/docs/:category/:title" { :category "greetings" }) ;; => IllegalArgumentException, because :title value is missing
-
-  (named-url "about page") ;; => "https://myservice.com/about"
-  (named-url "documents" {:title "a-title"}) ;; => "https://myservice.com/docs/a-title"
 )
+
+;; generate relative paths (by generated fns)
+(with-base-url "https://myservice.com"
+  (documents-url :title "a-title") ;; => "https://myservice.com/docs/title"
+  (documents-url :title "a-title" :category "greetings) ;; => "https://myservice.com/docs/greetings/a-title"
+)
+```
+
+Use your templates with Compojure/Clout (they're not present as a dependency, but we support same path structure):
+
+```clj
+(ns my-app
+  (require [compojure.core :as compojure])
+  (:use [clojurewerkz.route-one.core))
+
+(defroute about "/about")
+(defroute documents "/docs/:title")
+
+(compojure/defroutes main-routes
+  (compojure/GET about-template request (handlers.root/root-page request)) ;; will use /about as a template
+  (compojure/GET documents-template request (handlers.root/documents-page request)) ;; will use /documents as a template
+  (route/not-found "Page not found"))
 ```
 
 Documentation site for Urly is coming in the future (sorry!). Please see our test suite for more code examples.
