@@ -6,6 +6,27 @@ testing environments and so on.
 
 Route One is intentionally small and has very limited feature scope.
 
+## Maven Artifacts
+
+### The Most Recent Release
+
+With Leiningen:
+
+    [clojurewerkz/route-one "1.0.0-beta1"]
+
+With Maven:
+
+    <dependency>
+      <groupId>clojurewerkz</groupId>
+      <artifactId>route-one</artifactId>
+      <version>1.0.0-beta1</version>
+    </dependency>
+
+
+## Supported Clojure versions
+
+Route One is built from the ground up for Clojure 1.3+ and JDK 6+.
+
 
 ## Documentation & Examples
 
@@ -61,32 +82,11 @@ Use your templates with Compojure/Clout (they're not present as a dependency, bu
 Documentation site for Urly is coming in the future (sorry!). Please see our test suite for more code examples.
 
 
-## Maven Artifacts
-
-### The Most Recent Release
-
-With Leiningen:
-
-    [clojurewerkz/route-one "1.0.0-beta1"]
-
-With Maven:
-
-    <dependency>
-      <groupId>clojurewerkz</groupId>
-      <artifactId>route-one</artifactId>
-      <version>1.0.0-beta1</version>
-    </dependency>
-
-
-## Supported Clojure versions
-
-Route One is built from the ground up for Clojure 1.3+ and JDK 6+.
-
 
 ## Route One Is a ClojureWerkz Project
 
 Route One is part of the group of libraries known as ClojureWerkz, together with
-[Neocons](https://github.com/michaelklishin/neocons), [Monger](https://github.com/michaelklishin/monger), [Langohr](https://github.com/michaelklishin/langohr), [Elastisch](https://github.com/clojurewerkz/elastisch), [Quartzite](https://github.com/michaelklishin/quartzite), [Urly](https://github.com/michaelklishin/urly) and several others.
+[Cassaforte](http://clojurecassandra.info), [Monger](http://clojuremongodb.info), [Langohr](http://clojurerabbitmq.info), [Elastisch](http://clojureelasticsearch.info), [Quartzite](http://clojurequartz.info), and several others.
 
 
 ## Continuous Integration
