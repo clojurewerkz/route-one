@@ -32,7 +32,7 @@ Route One is built from the ground up for Clojure 1.3+ and JDK 6+.
 
 ```clj
 (ns my.app
-  (:use [clojurewerkz.route-one.core))
+  (:require [clojurewerkz.route-one.core :refer :all])
 
 ;; define your routes
 (defroute about "/about")
