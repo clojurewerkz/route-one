@@ -22,8 +22,8 @@ Route One is intentionally small and has very limited feature scope.
 (defroute documents-with-ext "/docs/:title.:ext")
 
 ;; generate relative paths (by generated fns)
-(documents-path :title "a-title") ;; => "/docs/title"
-(documents-path :title "a-title") ;; => "/docs/ohai"
+(documents-path :title "a-title") ;; => "/docs/a-title"
+(documents-path :title "ohai") ;; => "/docs/ohai"
 
 (path-for "/docs/:category/:title" { :category "greetings" :title "ohai" }) ;; => "/docs/greetings/ohai"
 (path-for "/docs/:category/:title" { :category "greetings" }) ;; => IllegalArgumentException, because :title value is missing
@@ -37,7 +37,7 @@ Route One is intentionally small and has very limited feature scope.
 
 ;; generate relative paths (by generated fns)
 (with-base-url "https://myservice.com"
-  (documents-url :title "a-title") ;; => "https://myservice.com/docs/title"
+  (documents-url :title "a-title") ;; => "https://myservice.com/docs/a-title"
   (documents-url :title "a-title" :category "greetings") ;; => "https://myservice.com/docs/greetings/a-title"
 )
 ```
