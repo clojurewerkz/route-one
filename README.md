@@ -38,7 +38,7 @@ Route One is intentionally small and has very limited feature scope.
 ;; generate relative paths (by generated fns)
 (with-base-url "https://myservice.com"
   (documents-url :title "a-title") ;; => "https://myservice.com/docs/title"
-  (documents-url :title "a-title" :category "greetings) ;; => "https://myservice.com/docs/greetings/a-title"
+  (documents-url :title "a-title" :category "greetings") ;; => "https://myservice.com/docs/greetings/a-title"
 )
 ```
 
