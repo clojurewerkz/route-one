@@ -6,3 +6,5 @@ pom.xml
 .lein-deps-sum
 TAGS
 checkouts/*
+todo.md
+target/*

@@ -7,7 +7,8 @@
                  [clojurewerkz/urly   "2.0.0-alpha5"]]
   :source-paths ["src/clojure"]
   :profiles {:1.3 {:dependencies [[org.clojure/clojure "1.3.0"]]}
-             :1.5 {:dependencies [[org.clojure/clojure "1.5.0-master-SNAPSHOT"]]}}
+             :1.5 {:dependencies [[org.clojure/clojure "1.5.0-master-SNAPSHOT"]]}
+             :dev {:dependencies [[compojure "1.1.5"]]}}
   :aliases {"all" ["with-profile" "dev:dev,1.3:dev,1.5"]}
   :repositories {"sonatype" {:url "http://oss.sonatype.org/content/repositories/releases"
                              :snapshots false
