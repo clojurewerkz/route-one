@@ -12,14 +12,14 @@ Route One is intentionally small and has very limited feature scope.
 
 With Leiningen:
 
-    [clojurewerkz/route-one "1.0.0-rc1"]
+    [clojurewerkz/route-one "1.0.0-rc2"]
 
 With Maven:
 
     <dependency>
       <groupId>clojurewerkz</groupId>
       <artifactId>route-one</artifactId>
-      <version>1.0.0-rc1</version>
+      <version>1.0.0-rc2</version>
     </dependency>
 
 
@@ -29,6 +29,40 @@ Route One is built from the ground up for Clojure 1.3+ and JDK 6+.
 
 
 ## Documentation & Examples
+
+In order to define a route, you can use `defroute`:
+
+```clj
+(defroute document "/documents/:document-id")
+```
+
+After defining a route, you get several helper functions to work with the route:
+
+`document-path` builds a relative path with passed params:
+
+```clj
+(document-url :document-id "123")
+;; => "/documents/123"
+```
+
+`documents-url` builds an absolute url:
+
+```clj
+(with-base-url "https://myservice.com"
+  (document-url :document-id "123"))
+;; => "https://myservice.com/documents/123"
+```
+
+`document-template` gives a template that you can use to match the url in Clout/Compojure or any
+other library that uses similar syntax.
+
+```clj
+document-template
+;; => "/documents/:document-id"
+```
+
+### Usage examples
+
 
 ```clj
 (ns my.app
@@ -63,11 +97,13 @@ Route One is built from the ground up for Clojure 1.3+ and JDK 6+.
 )
 ```
 
+### Compojure
+
 Use your templates with Compojure/Clout (they're not present as a dependency, but we support same path structure):
 
 ```clj
 (ns my-app
-  (require [compojure.core :as compojure])
+  (:require [compojure.core :as compojure])
   (:use [clojurewerkz.route-one.core))
 
 (defroute about "/about")
@@ -79,9 +115,27 @@ Use your templates with Compojure/Clout (they're not present as a dependency, bu
   (route/not-found "Page not found"))
 ```
 
+You can also use our overrides of Compojure functions that allow you to build named routes with Compojure:
+
+```clj
+(ns my-app
+  (:require [compojure.core :as compojure :as compojure])
+  (:use clojurewerkz.route-one.compojure))
+
+(compojure/defroutes main-routes
+  (GET about request (handlers.root/root-page request)) ;; will use /about as a template
+  (GET documents request (handlers.root/documents-page request)) ;; will use /documents as a template)
+```
+
+That will generate `main-routes` in same exact manner Compojure generates them, but will also add helper functions
+for building urls (`about-path`, `about-url`, `documents-path`, `document-url` and so on). For that, you'll have to
+bring in Compojure as a dependency yourself:
+
+```clj
+[compojure "1.1.5"]
+```
+
 Documentation site for Urly is coming in the future (sorry!). Please see our test suite for more code examples.
-
-
 
 ## Route One Is a ClojureWerkz Project
 

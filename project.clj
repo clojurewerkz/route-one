@@ -1,4 +1,4 @@
-(defproject clojurewerkz/route-one "1.0.0-rc1"
+(defproject clojurewerkz/route-one "1.0.0-rc2"
   :description "A tiny URL/route generation library"
   :url "http://github.com/clojurewerkz/route-one"
   :license {:name "Eclipse Public License"
