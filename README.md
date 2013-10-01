@@ -41,7 +41,7 @@ After defining a route, you get several helper functions to work with the route:
 `document-path` builds a relative path with passed params:
 
 ```clj
-(document-url :document-id "123")
+(document-path :document-id "123")
 ;; => "/documents/123"
 ```
 
