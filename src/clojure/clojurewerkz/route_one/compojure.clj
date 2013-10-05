@@ -43,3 +43,8 @@
   `(do
      (route-one/defroute ~(symbol (str name)) ~path)
      (compojure/ANY ~path ~args ~@body)))
+
+(defmacro catch-all
+  "Generate a Catch-all fallback route"
+  [args & body]
+  `(compojure/ANY "*" ~args ~@body))
