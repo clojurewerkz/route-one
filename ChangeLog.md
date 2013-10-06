@@ -1,3 +1,10 @@
+## Changes Between 1.0.0-rc2 and 1.0.0-rc3
+
+### `catch-all` route added
+
+`catch-all` route was added to ease rendering of custom HTML responses for fallback routes (such as
+404).
+
 ## Changes Between 1.0.0-rc1 and 1.0.0-rc2
 
 ### Tight Compojure integration
