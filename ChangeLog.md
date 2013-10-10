@@ -1,9 +1,12 @@
 ## Changes Between 1.0.0-rc2 and 1.0.0-rc3
 
-### `catch-all` route added
+### Catch All Route
 
-`catch-all` route was added to ease rendering of custom HTML responses for fallback routes (such as
-404).
+`clojurewerkz.route-one.compojure/catch-all` is a new helper macro that
+generates a route that matches any path.
+
+It is useful for defining fallback routes (such as 404 or 500 status pages).
+
 
 ## Changes Between 1.0.0-rc1 and 1.0.0-rc2
 
