@@ -1,8 +1,8 @@
 (ns clojurewerkz.route-one.core
   (:import clojurewerkz.urly.UrlLike)
-  (:require [clojure.set :as cs])
-  (:use [clojure.string :only [split join]]
-        [clojurewerkz.urly.core :only [url-like]]))
+  (:require [clojure.set :as cs]
+            [clojurewerkz.urly.core :refer [url-like] :as urly]
+            [clojure.string :refer [split]]))
 
 ;;
 ;; Implementation
@@ -16,7 +16,6 @@
   slash-re #"/")
 (def ^{:constant true :private true}
   slash "/")
-
 
 (defn validate-keys
   [^String s data]
@@ -70,7 +69,10 @@
 (defn url-for
   "Like path-for but generates full URLs. Use together with with-base-url."
   [^String s data]
-  (str (.mutatePath (url-like *base-url*) (path-for s data))))
+  (let [base-url (url-like *base-url*)
+        base-path (clojure.string/replace (urly/path-of base-url) #"/\Z" "")
+        rel-path  (clojure.string/replace (path-for s data) #"\A/" "")]
+    (str (.mutatePath base-url (str base-path "/" rel-path)))))
 
 (defmacro defroute
   [^clojure.lang.Symbol n ^String pattern]
