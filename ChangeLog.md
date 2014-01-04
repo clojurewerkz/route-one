@@ -1,3 +1,13 @@
+## Changes Between 1.0.0-rc3 and 1.0.0
+
+### url-for Preserves Paths From Base URL
+
+Leading path components from `*base-url*` is now preserved when
+constructing path in `url-for`.
+
+Contributed by Ray Miller.
+
+
 ## Changes Between 1.0.0-rc2 and 1.0.0-rc3
 
 ### Catch All Route
