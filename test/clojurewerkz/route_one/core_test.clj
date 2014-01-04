@@ -45,7 +45,11 @@
   ;; really broken input
   (with-base-url "HTTP://https://API.MYAPP.COM/"
     (testing "generation of routes with segments"
-      (is (= "https://api.myapp.com/clojurewerkz/route-one" (url-for "/:organization/:project" {:organization "clojurewerkz" :project "route-one"}))))))
+      (is (= "https://api.myapp.com/clojurewerkz/route-one" (url-for "/:organization/:project" {:organization "clojurewerkz" :project "route-one"})))))
+  (with-base-url "https://giove.local/path/prefix"
+    (testing "generation of URL with path prefix"
+      (is (= "https://giove.local/path/prefix/clojurewerkz/route-one"
+             (url-for "/:organization/:project" {:organization "clojurewerkz" :project "route-one"}))))))
 
 (deftest test-templates
   (is (= "/about" about-template))
