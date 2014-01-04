@@ -12,20 +12,20 @@ Route One is intentionally small and has very limited feature scope.
 
 With Leiningen:
 
-    [clojurewerkz/route-one "1.0.0-rc3"]
+    [clojurewerkz/route-one "1.0.0"]
 
 With Maven:
 
     <dependency>
       <groupId>clojurewerkz</groupId>
       <artifactId>route-one</artifactId>
-      <version>1.0.0-rc3</version>
+      <version>1.0.0</version>
     </dependency>
 
 
 ## Supported Clojure versions
 
-Route One is built from the ground up for Clojure 1.3+ and JDK 6+.
+Route One requires Clojure 1.4+.
 
 
 ## Documentation & Examples
