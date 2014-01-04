@@ -2,7 +2,7 @@
 
 ### url-for Preserves Paths From Base URL
 
-Leading path components from `*base-url*` is now preserved when
+Leading path component from `*base-url*` is now preserved when
 constructing path in `url-for`.
 
 Contributed by Ray Miller.
