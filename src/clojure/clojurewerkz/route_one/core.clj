@@ -2,7 +2,8 @@
   (:import clojurewerkz.urly.UrlLike)
   (:require [clojure.set :as cs]
             [clojurewerkz.urly.core :as urly]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [ring.util.codec :as codec]))
 
 ;;
 ;; Implementation
@@ -17,14 +18,17 @@
 (def ^{:constant true :private true}
   slash "/")
 
+(defn required-parts
+  [^String s]
+  (->> (str/split s #"/|\.")
+       (filter #(.startsWith ^String % ":"))
+       (map #(keyword (.substring ^String % 1)))
+       set))
+
 (defn validate-keys
   [^String s data]
-  (let [required-parts (->> (str/split s #"/|\.")
-                            (filter #(.startsWith ^String % ":"))
-                            (map #(keyword (.substring ^String % 1)))
-                            set)
-        existing-parts (set (keys data))
-        diff (cs/difference required-parts existing-parts)]
+  (let [existing-parts (set (keys data))
+        diff (cs/difference (required-parts s) existing-parts)]
     (when (not (empty? diff))
       (throw
        (IllegalArgumentException.
@@ -62,17 +66,27 @@
   (conj v (Route. path (:named opts) (:helper opts) opts)))
 
 (defn path-for
-  "Generates a regular path, replacing segments that start with a colon with respective values from the data map"
+  "Generates a regular path, replacing segments that start with a
+  colon with respective values from the data map. Any key/vals in `data`
+  that don't appear as segments in `s` are appended as a query string."
   [^String s data]
-  (replace-segments s data))
+  (let [path (replace-segments s data)
+        query-keys (remove (required-parts s) (keys data))]
+    (if (empty? query-keys)
+      path
+      (str path "?" (codec/form-encode (select-keys data query-keys))))))
 
 (defn url-for
   "Like path-for but generates full URLs. Use together with with-base-url."
   [^String s data]
-  (let [base-url (urly/url-like *base-url*)
-        base-path (str/replace (urly/path-of base-url) #"/\Z" "")
-        rel-path  (str/replace (path-for s data) #"\A/" "")]
-    (str (.mutatePath base-url (str base-path "/" rel-path)))))
+  (let [base-url   (urly/url-like *base-url*)
+        base-path  (str/replace (urly/path-of base-url) #"/\Z" "")
+        rel-path   (str/replace (replace-segments s data) #"\A/" "")
+        url        (.mutatePath base-url (str base-path "/" rel-path))
+        query-keys (remove (required-parts s) (keys data))]
+    (if (empty? query-keys)
+      (str url)
+      (str (urly/mutate-query url (codec/form-encode (select-keys data query-keys)))))))
 
 (defmacro defroute
   [^clojure.lang.Symbol n ^String pattern]
