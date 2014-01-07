@@ -103,7 +103,8 @@ Use your templates with Compojure/Clout (they're not present as a dependency, bu
 
 ```clj
 (ns my-app
-  (:require [compojure.core :as compojure])
+  (:require [compojure.core :as compojure]
+            [compojure.route :as route])
   (:use [clojurewerkz.route-one.core))
 
 (defroute about "/about")
@@ -111,7 +112,7 @@ Use your templates with Compojure/Clout (they're not present as a dependency, bu
 
 (compojure/defroutes main-routes
   (compojure/GET about-template request (handlers.root/root-page request)) ;; will use /about as a template
-  (compojure/GET documents-template request (handlers.root/documents-page request)) ;; will use /documents as a template
+  (compojure/GET documents-template request (handlers.root/documents-page request)) ;; will use /docs/:title as a template
   (route/not-found "Page not found"))
 ```
 
@@ -119,12 +120,12 @@ You can also use our overrides of Compojure functions that allow you to build na
 
 ```clj
 (ns my-app
-  (:require [compojure.core :as compojure :as compojure])
+  (:require [compojure.core :as compojure])
   (:use clojurewerkz.route-one.compojure))
 
 (compojure/defroutes main-routes
-  (GET about request (handlers.root/root-page request)) ;; will use /about as a template
-  (GET documents request (handlers.root/documents-page request)) ;; will use /documents as a template)
+  (GET about "/about" request (handlers.root/root-page request)) ;; will use /about as a template
+  (GET documents "/docs/:title" request (handlers.root/documents-page request)) ;; will use /docs/:title as a template)
 ```
 
 That will generate `main-routes` in same exact manner Compojure generates them, but will also add helper functions
@@ -135,7 +136,7 @@ bring in Compojure as a dependency yourself:
 [compojure "1.1.5"]
 ```
 
-Documentation site for Urly is coming in the future (sorry!). Please see our test suite for more code examples.
+Documentation site for Route One is coming in the future (sorry!). Please see our test suite for more code examples.
 
 ## Route One Is a ClojureWerkz Project
 
