@@ -32,7 +32,15 @@
     (is (= "/docs/cat/a-title" (category-documents-path :title "a-title" :category "cat")))
     (is (= "/docs/a-title" (documents-path :title "a-title"))))
   (testing "generation of named routes with segments"
-    (is (= "/docs/a-title.txt" (documents-with-ext-path :title "a-title" :ext "txt")))))
+    (is (= "/docs/a-title.txt" (documents-with-ext-path :title "a-title" :ext "txt"))))
+  (testing "generation of named routes w/o segments, but with query string"
+    (is (= "/about?name=Joe+Bloggs" (path-for "/about" {:name "Joe Bloggs"})))
+    (is (= "/about?name=Joe+Bloggs" (about-path :name "Joe Bloggs"))))
+  (testing "generation of named routes with segments and query string"
+    (is (= "/docs/cat/a-title?name=Marmalade"
+           (path-for "/docs/:category/:title" {:category "cat" :title "a-title" :name "Marmalade"})))
+    (is (= "/docs/cat/a-title?name=Marmalade"
+           (category-documents-path :category "cat" :title "a-title" :name "Marmalade")))))
 
 (deftest test-url-generation
   (with-base-url "http://giove.local"
@@ -49,7 +57,14 @@
   (with-base-url "https://giove.local/path/prefix"
     (testing "generation of URL with path prefix"
       (is (= "https://giove.local/path/prefix/clojurewerkz/route-one"
-             (url-for "/:organization/:project" {:organization "clojurewerkz" :project "route-one"}))))))
+             (url-for "/:organization/:project" {:organization "clojurewerkz" :project "route-one"})))))
+  (with-base-url "https://giove.local/path/prefix"
+    (testing "generation of URL with path prefix, no segments, and query string"
+      (is (= "https://giove.local/path/prefix/about?name=Joe+Bloggs"
+             (about-url :name "Joe Bloggs"))))
+    (testing "generation of URL with path prefix, segments, and query string"
+      (is (= "https://giove.local/path/prefix/docs/cat/a-title?name=Marmalade"
+             (category-documents-url :category "cat" :title "a-title" :name "Marmalade"))))))
 
 (deftest test-templates
   (is (= "/about" about-template))
