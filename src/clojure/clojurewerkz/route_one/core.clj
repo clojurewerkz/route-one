@@ -92,9 +92,9 @@
   [^clojure.lang.Symbol n ^String pattern]
   `(do (def ~(symbol (format "%s-template" n)) ~pattern)
        (defn ~(symbol (format "%s-path" n)) [& data#]
-         (path-for ~pattern (apply hash-map data#)))
+         (path-for ~pattern (if (= 1 (count data#)) (first data#) (apply hash-map data#))))
        (defn ~(symbol (format "%s-url" n)) [& data#]
-         (url-for ~pattern (apply hash-map data#)))))
+         (url-for ~pattern (if (= 1 (count data#)) (first data#) (apply hash-map data#))))))
 
 (defmacro with-base-url
   [s & body]

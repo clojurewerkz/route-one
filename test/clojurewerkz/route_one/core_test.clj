@@ -40,7 +40,10 @@
     (is (= "/docs/cat/a-title?name=Marmalade"
            (path-for "/docs/:category/:title" {:category "cat" :title "a-title" :name "Marmalade"})))
     (is (= "/docs/cat/a-title?name=Marmalade"
-           (category-documents-path :category "cat" :title "a-title" :name "Marmalade")))))
+           (category-documents-path :category "cat" :title "a-title" :name "Marmalade"))))
+  (testing "generation of name routes with single map argument"
+    (is (= "/docs/cat/a-title?name=Marmalade"
+           (category-documents-path {:category "cat" :title "a-title" :name "Marmalade"})))))
 
 (deftest test-url-generation
   (with-base-url "http://giove.local"
@@ -64,7 +67,10 @@
              (about-url :name "Joe Bloggs"))))
     (testing "generation of URL with path prefix, segments, and query string"
       (is (= "https://giove.local/path/prefix/docs/cat/a-title?name=Marmalade"
-             (category-documents-url :category "cat" :title "a-title" :name "Marmalade"))))))
+             (category-documents-url :category "cat" :title "a-title" :name "Marmalade"))))
+    (testing "generation or URL wih single map argument"
+      (is (= "https://giove.local/path/prefix/docs/cat/a-title?name=Marmalade"
+             (category-documents-url {:category "cat" :title "a-title" :name "Marmalade"}))))))
 
 (deftest test-templates
   (is (= "/about" about-template))
