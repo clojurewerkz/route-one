@@ -18,7 +18,10 @@
   (testing "cases with some segments missing from the data map"
     (are [path data] (is (thrown? IllegalArgumentException (replace-segments path data)))
          "/docs/:title" { :greeting "ohai" }
-         "/docs/:category/:title" { :title "ohai" })))
+         "/docs/:category/:title" { :title "ohai" }))
+  (testing "cases where data map contains regex back-reference"
+    (is "/docs/RA<Gp$&!a7Om)W]!<hZ~P]q|V@=??0XuD=rt7niE"
+        (replace-segments "/docs/:title" {:title "RA<Gp$&!a7Om)W]!<hZ~P]q|V@=??0XuD=rt7niE"}))))
 
 (deftest test-path-generation
   (testing "generation of routes w/o segments"

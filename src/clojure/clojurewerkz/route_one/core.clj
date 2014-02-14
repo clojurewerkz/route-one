@@ -44,7 +44,7 @@
             (let [pattern (re-pattern (str ":" (name k)))]
               (clojure.string/replace acc
                                       pattern
-                                      (str replacement))))
+                                      (str/re-quote-replacement (str replacement)))))
           s data))
 
 
