@@ -41,9 +41,9 @@
   [^String s data]
   (validate-keys s data)
   (reduce (fn [acc [k replacement]]
-            (let [pattern (re-pattern (str ":" (name k)))]
+            (let [match (str ":" (name k))]
               (clojure.string/replace acc
-                                      pattern
+                                      match
                                       (str replacement))))
           s data))
 
