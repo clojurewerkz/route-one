@@ -8,9 +8,10 @@
                  [ring/ring-codec "1.0.0"]]
   :source-paths ["src/clojure"]
   :profiles {:1.4 {:dependencies [[org.clojure/clojure "1.4.0"]]}
-             :1.6 {:dependencies [[org.clojure/clojure "1.6.0-master-SNAPSHOT"]]}
-             :dev {:dependencies [[compojure "1.1.6"]]}}
-  :aliases {"all" ["with-profile" "dev:dev,1.4:dev,1.6"]}
+             :1.6 {:dependencies [[org.clojure/clojure "1.6.0-beta1"]]}
+             :dev {:dependencies [[compojure "1.1.6"]]}
+             :master {:dependencies [[org.clojure/clojure "1.6.0-master-SNAPSHOT"]]}}
+  :aliases {"all" ["with-profile" "dev:dev,1.4:dev,1.6:dev,master"]}
   :repositories {"sonatype" {:url "http://oss.sonatype.org/content/repositories/releases"
                              :snapshots false
                              :releases {:checksum :fail :update :always}}
