@@ -1,3 +1,20 @@
+## Changes Between 1.0.0 and 1.1.0
+
+### Extra Keys as Query Parameters
+
+Generate and append query from data keys that don't appear as path
+segments.
+
+Contributed by Ray Miller.
+
+### Back-reference Escaping
+
+When replacing path segments, use re-quote-replacement to escape any
+back-references in the replacement string.
+
+Contributed by Ray Miller.
+
+
 ## Changes Between 1.0.0-rc3 and 1.0.0
 
 ### url-for Preserves Paths From Base URL
