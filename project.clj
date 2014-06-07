@@ -3,7 +3,7 @@
   :url "http://github.com/clojurewerkz/route-one"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.5.1"]
+  :dependencies [[org.clojure/clojure "1.6.0"]
                  [clojurewerkz/urly   "2.0.0-alpha5"]
                  [ring/ring-codec "1.0.0"]]
   :source-paths ["src/clojure"]
