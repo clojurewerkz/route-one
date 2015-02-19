@@ -8,6 +8,7 @@
 (defroute documents "/docs/:title")
 (defroute category-documents "/docs/:category/:title")
 (defroute documents-with-ext "/docs/:title.:ext")
+(defroute with-defaults "/articles/:category/:page" {:page 1})
 
 (deftest test-replace-segments
   (testing "cases with all segments present in the data map"
@@ -46,7 +47,10 @@
            (category-documents-path :category "cat" :title "a-title" :name "Marmalade"))))
   (testing "generation of name routes with single map argument"
     (is (= "/docs/cat/a-title?name=Marmalade"
-           (category-documents-path {:category "cat" :title "a-title" :name "Marmalade"})))))
+           (category-documents-path {:category "cat" :title "a-title" :name "Marmalade"}))))
+  (testing "generation of named routes with defaults"
+    (is (= "/articles/cat/1"
+           (with-defaults-path {:category "cat"})))))
 
 (deftest test-url-generation
   (with-base-url "http://giove.local"
@@ -73,7 +77,10 @@
              (category-documents-url :category "cat" :title "a-title" :name "Marmalade"))))
     (testing "generation or URL wih single map argument"
       (is (= "https://giove.local/path/prefix/docs/cat/a-title?name=Marmalade"
-             (category-documents-url {:category "cat" :title "a-title" :name "Marmalade"}))))))
+             (category-documents-url {:category "cat" :title "a-title" :name "Marmalade"}))))
+    (testing "generation of URL with defaults"
+      (is (= "https://giove.local/path/prefix/articles/cat/1"
+             (with-defaults-url {:category "cat"}))))))
 
 (deftest test-templates
   (is (= "/about" about-template))

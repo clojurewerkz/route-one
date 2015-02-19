@@ -89,12 +89,15 @@
       (str (urly/mutate-query url (codec/form-encode (select-keys data query-keys)))))))
 
 (defmacro defroute
-  [^clojure.lang.Symbol n ^String pattern]
+  {:arglists '([n pattern defaults?])}
+  [^clojure.lang.Symbol n ^String pattern & [defaults]]
   `(do (def ~(symbol (format "%s-template" n)) ~pattern)
        (defn ~(symbol (format "%s-path" n)) [& data#]
-         (path-for ~pattern (if (= 1 (count data#)) (first data#) (apply hash-map data#))))
+         (let [data# (if (= 1 (count data#)) (first data#) (apply hash-map data#))]
+           (path-for ~pattern (merge data# ~defaults))))
        (defn ~(symbol (format "%s-url" n)) [& data#]
-         (url-for ~pattern (if (= 1 (count data#)) (first data#) (apply hash-map data#))))))
+         (let [data# (if (= 1 (count data#)) (first data#) (apply hash-map data#))]
+           (url-for ~pattern (merge data# ~defaults))))))
 
 (defmacro with-base-url
   [s & body]
