@@ -71,4 +71,4 @@
 (defmacro defroutes
   [name & routes]
   (let [[name routes] (name-with-attributes name routes)]
-    `(def ~name (routes ~@routes))))
+    `(def ~name ((routes ~@routes)))))
