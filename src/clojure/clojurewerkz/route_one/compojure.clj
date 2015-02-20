@@ -1,5 +1,6 @@
 (ns clojurewerkz.route-one.compojure
   (:require [compojure.core :as compojure]
+            [clojure.tools.macro :refer (name-with-attributes)]
             [clojurewerkz.route-one.core :as route-one]))
 
 (def ^{:dynamic true} *route-prefix* nil)
@@ -46,14 +47,28 @@
   [args & body]
   `(compojure/ANY "*" ~args ~@body))
 
+(defn- evaluate-thunk
+  [form]
+  `(let [routes-thunk?# (:routes-thunk? (meta ~form))]
+     (if routes-thunk?#
+       (~form)
+       ~form)))
+
+(defmacro routes
+  [& handlers]
+  `(vary-meta
+     (fn []
+       (compojure/routes ~@(map evaluate-thunk handlers)))
+     assoc :routes-thunk? true))
+
 (defmacro context
   [path args & routes]
   `(let [path# (if *route-prefix* (str *route-prefix* ~path) ~path)]
      (binding [*route-prefix* path#]
-       (let [routes# (compojure/routes ~@routes)]
+       (let [routes# ((routes ~@routes))]
          (compojure/context ~path ~args routes#)))))
 
-(defmacro routes
-  [& handlers]
-  `(fn []
-     (compojure/routes ~@handlers)))
+(defmacro defroutes
+  [name & routes]
+  (let [[name routes] (name-with-attributes name routes)]
+    `(def ~name (routes ~@routes))))

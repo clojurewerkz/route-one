@@ -32,6 +32,6 @@
   (testing "Handler in nested contexts"
     (let [inner (routes (context "/tasks" []
                           (GET user-add-task "/add" {:keys [params]} "res")))
-          outer (context "/user/current" [] (inner))]
+          outer (context "/user/current" [] inner)]
       (is (= "res" (:body (outer (fake-request :get "/user/current/tasks/add" {:get :params})))))
       (is (= (user-add-task-path) "/user/current/tasks/add")))))
