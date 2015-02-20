@@ -4,7 +4,8 @@
 
 (def ^{:dynamic true} *route-prefix* nil)
 
-(defmacro handler-with-route [req-handler name path args body]
+(defmacro handler-with-route
+  [req-handler name path args body]
   `(do
      (let [route-path# (if *route-prefix* (str *route-prefix* ~path) ~path)]
        (route-one/defroute ~(symbol (str name)) route-path#))
@@ -45,12 +46,14 @@
   [args & body]
   `(compojure/ANY "*" ~args ~@body))
 
-(defmacro context [path args & routes]
+(defmacro context
+  [path args & routes]
   `(let [path# (if *route-prefix* (str *route-prefix* ~path) ~path)]
      (binding [*route-prefix* path#]
        (let [routes# (compojure/routes ~@routes)]
          (compojure/context ~path ~args routes#)))))
 
-(defmacro routes [& handlers]
+(defmacro routes
+  [& handlers]
   `(fn []
      (compojure/routes ~@handlers)))
