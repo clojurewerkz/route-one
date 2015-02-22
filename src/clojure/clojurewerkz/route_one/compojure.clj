@@ -47,9 +47,9 @@
   [args & body]
   `(compojure/ANY "*" ~args ~@body))
 
-(defn- evaluate-thunk
+(defn ^{:private true} evaluate-route-thunk
   [form]
-  `(let [routes-thunk?# (:routes-thunk? (meta ~form))]
+  `(let [routes-thunk?# (::routes-thunk? (meta ~form))]
      (if routes-thunk?#
        (~form)
        ~form)))
@@ -58,8 +58,8 @@
   [& handlers]
   `(vary-meta
      (fn []
-       (compojure/routes ~@(map evaluate-thunk handlers)))
-     assoc :routes-thunk? true))
+       (compojure/routes ~@(map evaluate-route-thunk handlers)))
+     assoc ::routes-thunk? true))
 
 (defmacro context
   [path args & routes]
