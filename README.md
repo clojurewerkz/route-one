@@ -12,14 +12,14 @@ Route One is intentionally small and has very limited feature scope.
 
 With Leiningen:
 
-    [clojurewerkz/route-one "1.1.0"]
+    [clojurewerkz/route-one "1.2.0"]
 
 With Maven:
 
     <dependency>
       <groupId>clojurewerkz</groupId>
       <artifactId>route-one</artifactId>
-      <version>1.1.0</version>
+      <version>1.2.0</version>
     </dependency>
 
 
