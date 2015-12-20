@@ -1,3 +1,14 @@
+## Changes Between 1.1.0 and 1.2.0
+
+### Clojure 1.7 by Default
+
+The project now depends on `org.clojure/clojure` version `1.7.0`. It is
+still compatible with Clojure 1.5 and if your `project.clj` depends on
+a different version, it will be used, but 1.7 is the default now.
+
+
+
+
 ## Changes Between 1.0.0 and 1.1.0
 
 ### Extra Keys as Query Parameters
